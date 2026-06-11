@@ -75,7 +75,7 @@ export interface CognitiveComputeResult {
   synapseConnectivity: number;
 }
 
-export interface ScanResult extends Snapshot {}
+export type ScanResult = Snapshot;
 
 export type MetricKey = "noteCount" | "bodyCount" | "uniqueTagCount" | "connectionCount";
 export type RangeKey = "7d" | "30d" | "90d" | "all";

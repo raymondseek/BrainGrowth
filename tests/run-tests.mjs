@@ -5,6 +5,8 @@ import { pathToFileURL } from "node:url";
 import path from "node:path";
 import esbuild from "esbuild";
 
+globalThis.window = globalThis;
+
 const outdir = path.join(process.cwd(), ".test-build");
 await rm(outdir, { recursive: true, force: true });
 await mkdir(outdir, { recursive: true });

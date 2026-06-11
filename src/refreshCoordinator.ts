@@ -1,7 +1,7 @@
 import type { App, Plugin } from "obsidian";
 import { scanVault as defaultScanVault } from "./scanner";
 import { upsertSnapshot } from "./snapshotStore";
-import type { BrainGrowthData, RefreshFeedback, RefreshSource, RefreshState } from "./types";
+import type { BrainGrowthData, RefreshFeedback, RefreshSource, RefreshState, ScanResult } from "./types";
 
 export interface RefreshCoordinatorHost {
   app: App;
@@ -15,7 +15,7 @@ export const REFRESH_DEBOUNCE_MS = 3000;
 
 interface RefreshCoordinatorOptions {
   debounceMs?: number;
-  scan?: (app: App) => Promise<import("./types").ScanResult>;
+  scan?: (app: App) => Promise<ScanResult>;
 }
 
 export class RefreshCoordinator {
@@ -24,11 +24,11 @@ export class RefreshCoordinator {
     feedback: "idle",
     lastSource: null
   };
-  private debounceTimer: ReturnType<typeof globalThis.setTimeout> | null = null;
+  private debounceTimer: ReturnType<typeof window.setTimeout> | null = null;
   private pendingRefresh = false;
 
   private readonly debounceMs: number;
-  private readonly scan: (app: App) => Promise<import("./types").ScanResult>;
+  private readonly scan: (app: App) => Promise<ScanResult>;
 
   constructor(
     private readonly host: RefreshCoordinatorHost,
@@ -49,18 +49,20 @@ export class RefreshCoordinator {
 
   dispose(): void {
     if (this.debounceTimer !== null) {
-      globalThis.clearTimeout(this.debounceTimer);
+      window.clearTimeout(this.debounceTimer);
       this.debounceTimer = null;
     }
   }
 
   schedule(source: RefreshSource): void {
     if (this.debounceTimer !== null) {
-      globalThis.clearTimeout(this.debounceTimer);
+      window.clearTimeout(this.debounceTimer);
     }
-    this.debounceTimer = globalThis.setTimeout(() => {
+    this.debounceTimer = window.setTimeout(() => {
       this.debounceTimer = null;
-      void this.refresh(source);
+      void this.refresh(source).catch((error) => {
+        console.error("Brain Growth scheduled refresh failed", error);
+      });
     }, this.debounceMs);
   }
 
@@ -88,7 +90,10 @@ export class RefreshCoordinator {
       this.setState({ isScanning: false, feedback: "failed", lastSource: source });
       this.host.notifyBrainGrowthViews("failed");
       if (source === "dashboard-manual") {
-        this.host.showNotice?.("Brain Growth scan failed. Previous stats are still shown.");
+        const showNotice = this.host.showNotice;
+        if (showNotice) {
+          showNotice("Brain Growth scan failed. Previous stats are still shown.");
+        }
       }
     }
 
@@ -109,6 +114,9 @@ export class RefreshCoordinator {
 
   private showManualNotice(source: RefreshSource, feedback: RefreshFeedback): void {
     if (source !== "dashboard-manual") return;
-    this.host.showNotice?.(feedback === "upToDate" ? "Brain Growth is already up to date." : "Brain Growth updated.");
+    const showNotice = this.host.showNotice;
+    if (showNotice) {
+      showNotice(feedback === "upToDate" ? "Brain Growth is already up to date." : "Brain Growth updated.");
+    }
   }
 }

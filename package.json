@@ -1,6 +1,6 @@
 {
   "name": "brain-growth",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "description": "Track note count, body count, tags, links, and vault growth trends in Obsidian.",
   "main": "main.js",
   "scripts": {
@@ -19,7 +19,6 @@
   "license": "MIT",
   "devDependencies": {
     "@types/node": "^20.11.30",
-    "builtin-modules": "^3.3.0",
     "esbuild": "^0.20.2",
     "obsidian": "^1.5.12",
     "typescript": "^5.4.2"

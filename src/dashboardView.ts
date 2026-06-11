@@ -1,4 +1,4 @@
-import { ItemView, setIcon, type WorkspaceLeaf } from "obsidian";
+import { activeDocument, activeWindow, ItemView, sanitizeHTMLToDom, setIcon, type WorkspaceLeaf } from "obsidian";
 import { calculateCognitiveCompute, formatFactor, formatTops } from "./benchmark";
 import { formatNumber, formatGrowth, getMetricDefinition, METRICS } from "./metrics";
 import { getGrowth, RANGE_LABELS, selectSnapshotWindow } from "./ranges";
@@ -179,7 +179,7 @@ export class BrainGrowthDashboardView extends ItemView {
   private render(options: { preserveScroll?: boolean } = {}): void {
     const container = this.containerEl.children[1];
     const previousScrollPositions =
-      options.preserveScroll && container instanceof HTMLElement ? this.captureScrollPositions(container) : [];
+      options.preserveScroll && container instanceof activeWindow.HTMLElement ? this.captureScrollPositions(container) : [];
     container.empty();
     container.addClass("brain-growth-view");
     const backgroundMode = this.plugin.getBackgroundMode();
@@ -210,12 +210,12 @@ export class BrainGrowthDashboardView extends ItemView {
   private captureScrollPositions(container: HTMLElement): Array<{ element: HTMLElement; top: number; left: number }> {
     const candidates: HTMLElement[] = [container, this.containerEl];
     const viewContent = this.containerEl.closest(".workspace-leaf-content")?.querySelector(".view-content");
-    if (viewContent instanceof HTMLElement) {
+    if (viewContent instanceof activeWindow.HTMLElement) {
       candidates.push(viewContent);
     }
 
     let current: HTMLElement | null = container.parentElement;
-    while (current && current !== document.body) {
+    while (current && current !== activeDocument.body) {
       candidates.push(current);
       current = current.parentElement;
     }
@@ -233,9 +233,9 @@ export class BrainGrowthDashboardView extends ItemView {
       }
     };
 
-    globalThis.requestAnimationFrame(restore);
-    globalThis.setTimeout(restore, 0);
-    globalThis.setTimeout(restore, 60);
+    activeWindow.requestAnimationFrame(restore);
+    activeWindow.setTimeout(restore, 0);
+    activeWindow.setTimeout(restore, 60);
   }
 
   private renderHeader(container: Element, lastSuccessfulScanAt: string | null): void {
@@ -445,25 +445,24 @@ export class BrainGrowthDashboardView extends ItemView {
     if (this.activeMetric === "noteCount") {
       const latest = snapshots[snapshots.length - 1];
       panel.addClass("is-neuron-trend-panel");
-      chart.innerHTML = `
-        <div class="brain-growth-combo-chart">
-          <div class="brain-growth-combo-line">
-            ${this.buildMultiLineSvgChart(snapshots, NEURON_TREND_SERIES, this.activeRange)}
-          </div>
-          <div class="brain-growth-combo-side">
-            ${latest ? this.buildNoteCompositionPanel(latest) : ""}
-          </div>
-        </div>
-      `;
+      const comboChart = chart.createDiv({ cls: "brain-growth-combo-chart" });
+      const comboLine = comboChart.createDiv({ cls: "brain-growth-combo-line" });
+      this.appendMarkup(comboLine, this.buildMultiLineSvgChart(snapshots, NEURON_TREND_SERIES, this.activeRange));
+      const comboSide = comboChart.createDiv({ cls: "brain-growth-combo-side" });
+      if (latest) this.appendMarkup(comboSide, this.buildNoteCompositionPanel(latest));
     } else if (this.activeMetric === "bodyCount") {
-      chart.innerHTML = this.buildSignalsChart(snapshots, this.activeRange);
+      this.appendMarkup(chart, this.buildSignalsChart(snapshots, this.activeRange));
     } else if (this.activeMetric === "uniqueTagCount") {
-      chart.innerHTML = this.buildEngramChart(snapshots, this.activeRange);
+      this.appendMarkup(chart, this.buildEngramChart(snapshots, this.activeRange));
     } else if (this.activeMetric === "connectionCount") {
-      chart.innerHTML = this.buildSynapsesChart(snapshots, this.activeRange);
+      this.appendMarkup(chart, this.buildSynapsesChart(snapshots, this.activeRange));
     } else {
-      chart.innerHTML = this.buildSvgChart(snapshots, this.activeMetric, metric.colorVar, this.activeRange);
+      this.appendMarkup(chart, this.buildSvgChart(snapshots, this.activeMetric, metric.colorVar, this.activeRange));
     }
+  }
+
+  private appendMarkup(container: Element, markup: string): void {
+    container.appendChild(sanitizeHTMLToDom(markup));
   }
 
   private getChartAnimationKey(snapshots: Snapshot[]): string {
@@ -725,7 +724,7 @@ export class BrainGrowthDashboardView extends ItemView {
 
   private applyMetricHighlight(label: string): void {
     const root = this.containerEl.children[1];
-    if (!(root instanceof HTMLElement)) return;
+    if (!(root instanceof activeWindow.HTMLElement)) return;
     root.addClass("is-metric-highlight-active");
     root.querySelectorAll(".brain-growth-highlight-target").forEach((target) => {
       const isMatch = target.getAttribute("data-metric-label") === label;
@@ -736,7 +735,7 @@ export class BrainGrowthDashboardView extends ItemView {
 
   private clearMetricHighlight(): void {
     const root = this.containerEl.children[1];
-    if (!(root instanceof HTMLElement)) return;
+    if (!(root instanceof activeWindow.HTMLElement)) return;
     root.removeClass("is-metric-highlight-active");
     root.querySelectorAll(".brain-growth-highlight-target").forEach((target) => {
       target.classList.remove("is-highlight", "is-dim");

@@ -1,4 +1,4 @@
-import { Notice, Plugin, WorkspaceLeaf } from "obsidian";
+import { activeWindow, Notice, Plugin } from "obsidian";
 import { BrainGrowthDashboardView, BRAIN_GROWTH_VIEW_TYPE } from "./dashboardView";
 import { BrainGrowthMiniPanelView, BRAIN_GROWTH_MINI_PANEL_VIEW_TYPE } from "./miniPanelView";
 import { canInitializeHistoricalGrowth, initializeHistoricalGrowth } from "./historicalInitializer";
@@ -41,15 +41,17 @@ export default class BrainGrowthPlugin extends Plugin {
     });
 
     this.addCommand({
-      id: "open-brain-growth-mini-panel",
-      name: "Open Brain Growth Mini Panel",
+      id: "open-mini-panel",
+      name: "Open mini panel",
       callback: async () => {
         await this.openMiniPanel();
       }
     });
 
     this.app.workspace.onLayoutReady(() => {
-      void this.refreshStats("startup");
+      void this.refreshStats("startup").catch((error) => {
+        console.error("Brain Growth startup refresh failed", error);
+      });
       registerRefreshTriggers(this);
       this.ensureMiniPanelResidentOnStartup();
     });
@@ -57,8 +59,6 @@ export default class BrainGrowthPlugin extends Plugin {
 
   onunload(): void {
     this.refreshCoordinator?.dispose();
-    this.app.workspace.detachLeavesOfType(BRAIN_GROWTH_VIEW_TYPE);
-    this.app.workspace.detachLeavesOfType(BRAIN_GROWTH_MINI_PANEL_VIEW_TYPE);
   }
 
   getData(): BrainGrowthData {
@@ -103,19 +103,19 @@ export default class BrainGrowthPlugin extends Plugin {
   async openDashboard(): Promise<void> {
     const existing = this.app.workspace.getLeavesOfType(BRAIN_GROWTH_VIEW_TYPE)[0];
     if (existing) {
-      this.app.workspace.revealLeaf(existing);
+      await this.app.workspace.revealLeaf(existing);
       return;
     }
 
-    const leaf = this.app.workspace.getLeaf("tab") as WorkspaceLeaf;
+    const leaf = this.app.workspace.getLeaf("tab");
     await leaf.setViewState({ type: BRAIN_GROWTH_VIEW_TYPE, active: true });
-    this.app.workspace.revealLeaf(leaf);
+    await this.app.workspace.revealLeaf(leaf);
   }
 
   async openMiniPanel(): Promise<void> {
     const existing = this.app.workspace.getLeavesOfType(BRAIN_GROWTH_MINI_PANEL_VIEW_TYPE)[0];
     if (existing) {
-      this.app.workspace.revealLeaf(existing);
+      await this.app.workspace.revealLeaf(existing);
       this.refreshOpenViews();
       return;
     }
@@ -123,7 +123,7 @@ export default class BrainGrowthPlugin extends Plugin {
     const leaf = this.app.workspace.getRightLeaf(false) ?? this.app.workspace.getRightLeaf(true);
     if (!leaf) return;
     await leaf.setViewState({ type: BRAIN_GROWTH_MINI_PANEL_VIEW_TYPE, active: true });
-    this.app.workspace.revealLeaf(leaf);
+    await this.app.workspace.revealLeaf(leaf);
     this.refreshOpenViews();
   }
 
@@ -154,16 +154,20 @@ export default class BrainGrowthPlugin extends Plugin {
   }
 
   private ensureMiniPanelResidentOnStartup(): void {
-    void this.openMiniPanel();
+    void this.openMiniPanel().catch((error) => {
+      console.error("Brain Growth mini panel failed to open", error);
+    });
     this.queueMiniPanelEnsure(1500);
     this.queueMiniPanelEnsure(5000);
   }
 
   private queueMiniPanelEnsure(delayMs: number): void {
-    const timer = window.setTimeout(() => {
-      void this.openMiniPanel();
+    const timer = activeWindow.setTimeout(() => {
+      void this.openMiniPanel().catch((error) => {
+        console.error("Brain Growth mini panel failed to open", error);
+      });
     }, delayMs);
-    this.register(() => window.clearTimeout(timer));
+    this.register(() => activeWindow.clearTimeout(timer));
   }
 
   async refreshStats(source: RefreshSource): Promise<void> {
