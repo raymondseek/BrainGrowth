@@ -1,4 +1,9 @@
+*.html
+.DS_Store
 node_modules/
 .npm-cache/
 .test-build/
 main.js
+data.json
+demo-data.json
+MVP2-QA.md
