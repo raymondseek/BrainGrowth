@@ -11,6 +11,20 @@ Brain Growth tracks how your Obsidian vault grows over time. It scans Markdown n
 - Initialize historical growth from existing vault file metadata.
 - Switch dashboard background mode between dark and light.
 
+## Screenshots
+
+### Dashboard, light mode
+
+![Brain Growth dashboard in light mode](assets/dashboard-light.png)
+
+### Dashboard, dark mode
+
+![Brain Growth dashboard in dark mode](assets/dashboard-dark.png)
+
+### Mini panel
+
+![Brain Growth mini panel](assets/mini-panel.png)
+
 ## Usage
 
 After enabling Brain Growth, use the ribbon icon or the command palette command **Open Brain Growth Mini Panel**.
