@@ -1,0 +1,636 @@
+{
+  "schemaVersion": 1,
+  "snapshots": [
+    {
+      "date": "2026-03-05",
+      "capturedAt": "2026-03-05T20:45:00+08:00",
+      "noteCount": 38,
+      "bodyCount": 14200,
+      "uniqueTagCount": 24
+    },
+    {
+      "date": "2026-03-06",
+      "capturedAt": "2026-03-06T20:45:00+08:00",
+      "noteCount": 38,
+      "bodyCount": 14340,
+      "uniqueTagCount": 24
+    },
+    {
+      "date": "2026-03-07",
+      "capturedAt": "2026-03-07T20:45:00+08:00",
+      "noteCount": 38,
+      "bodyCount": 14528,
+      "uniqueTagCount": 24
+    },
+    {
+      "date": "2026-03-08",
+      "capturedAt": "2026-03-08T20:45:00+08:00",
+      "noteCount": 39,
+      "bodyCount": 14761,
+      "uniqueTagCount": 24
+    },
+    {
+      "date": "2026-03-09",
+      "capturedAt": "2026-03-09T20:45:00+08:00",
+      "noteCount": 39,
+      "bodyCount": 15032,
+      "uniqueTagCount": 24
+    },
+    {
+      "date": "2026-03-10",
+      "capturedAt": "2026-03-10T20:45:00+08:00",
+      "noteCount": 39,
+      "bodyCount": 15335,
+      "uniqueTagCount": 24
+    },
+    {
+      "date": "2026-03-11",
+      "capturedAt": "2026-03-11T20:45:00+08:00",
+      "noteCount": 40,
+      "bodyCount": 15555,
+      "uniqueTagCount": 24
+    },
+    {
+      "date": "2026-03-12",
+      "capturedAt": "2026-03-12T20:45:00+08:00",
+      "noteCount": 40,
+      "bodyCount": 15791,
+      "uniqueTagCount": 24
+    },
+    {
+      "date": "2026-03-13",
+      "capturedAt": "2026-03-13T20:45:00+08:00",
+      "noteCount": 40,
+      "bodyCount": 16035,
+      "uniqueTagCount": 24
+    },
+    {
+      "date": "2026-03-14",
+      "capturedAt": "2026-03-14T20:45:00+08:00",
+      "noteCount": 41,
+      "bodyCount": 16280,
+      "uniqueTagCount": 24
+    },
+    {
+      "date": "2026-03-15",
+      "capturedAt": "2026-03-15T20:45:00+08:00",
+      "noteCount": 41,
+      "bodyCount": 16520,
+      "uniqueTagCount": 24
+    },
+    {
+      "date": "2026-03-16",
+      "capturedAt": "2026-03-16T20:45:00+08:00",
+      "noteCount": 41,
+      "bodyCount": 16750,
+      "uniqueTagCount": 25
+    },
+    {
+      "date": "2026-03-17",
+      "capturedAt": "2026-03-17T20:45:00+08:00",
+      "noteCount": 42,
+      "bodyCount": 16858,
+      "uniqueTagCount": 25
+    },
+    {
+      "date": "2026-03-18",
+      "capturedAt": "2026-03-18T20:45:00+08:00",
+      "noteCount": 42,
+      "bodyCount": 16966,
+      "uniqueTagCount": 25
+    },
+    {
+      "date": "2026-03-19",
+      "capturedAt": "2026-03-19T20:45:00+08:00",
+      "noteCount": 42,
+      "bodyCount": 17092,
+      "uniqueTagCount": 25
+    },
+    {
+      "date": "2026-03-20",
+      "capturedAt": "2026-03-20T20:45:00+08:00",
+      "noteCount": 43,
+      "bodyCount": 17236,
+      "uniqueTagCount": 25
+    },
+    {
+      "date": "2026-03-21",
+      "capturedAt": "2026-03-21T20:45:00+08:00",
+      "noteCount": 43,
+      "bodyCount": 17398,
+      "uniqueTagCount": 25
+    },
+    {
+      "date": "2026-03-22",
+      "capturedAt": "2026-03-22T20:45:00+08:00",
+      "noteCount": 45,
+      "bodyCount": 17578,
+      "uniqueTagCount": 25
+    },
+    {
+      "date": "2026-03-23",
+      "capturedAt": "2026-03-23T20:45:00+08:00",
+      "noteCount": 46,
+      "bodyCount": 17668,
+      "uniqueTagCount": 25
+    },
+    {
+      "date": "2026-03-24",
+      "capturedAt": "2026-03-24T20:45:00+08:00",
+      "noteCount": 46,
+      "bodyCount": 17776,
+      "uniqueTagCount": 25
+    },
+    {
+      "date": "2026-03-25",
+      "capturedAt": "2026-03-25T20:45:00+08:00",
+      "noteCount": 46,
+      "bodyCount": 17902,
+      "uniqueTagCount": 25
+    },
+    {
+      "date": "2026-03-26",
+      "capturedAt": "2026-03-26T20:45:00+08:00",
+      "noteCount": 47,
+      "bodyCount": 18046,
+      "uniqueTagCount": 25
+    },
+    {
+      "date": "2026-03-27",
+      "capturedAt": "2026-03-27T20:45:00+08:00",
+      "noteCount": 47,
+      "bodyCount": 18208,
+      "uniqueTagCount": 26
+    },
+    {
+      "date": "2026-03-28",
+      "capturedAt": "2026-03-28T20:45:00+08:00",
+      "noteCount": 47,
+      "bodyCount": 18388,
+      "uniqueTagCount": 26
+    },
+    {
+      "date": "2026-03-29",
+      "capturedAt": "2026-03-29T20:45:00+08:00",
+      "noteCount": 48,
+      "bodyCount": 18478,
+      "uniqueTagCount": 26
+    },
+    {
+      "date": "2026-03-30",
+      "capturedAt": "2026-03-30T20:45:00+08:00",
+      "noteCount": 48,
+      "bodyCount": 18586,
+      "uniqueTagCount": 26
+    },
+    {
+      "date": "2026-03-31",
+      "capturedAt": "2026-03-31T20:45:00+08:00",
+      "noteCount": 48,
+      "bodyCount": 18740,
+      "uniqueTagCount": 26
+    },
+    {
+      "date": "2026-04-01",
+      "capturedAt": "2026-04-01T20:45:00+08:00",
+      "noteCount": 49,
+      "bodyCount": 18943,
+      "uniqueTagCount": 26
+    },
+    {
+      "date": "2026-04-02",
+      "capturedAt": "2026-04-02T20:45:00+08:00",
+      "noteCount": 49,
+      "bodyCount": 19190,
+      "uniqueTagCount": 26
+    },
+    {
+      "date": "2026-04-03",
+      "capturedAt": "2026-04-03T20:45:00+08:00",
+      "noteCount": 49,
+      "bodyCount": 19262,
+      "uniqueTagCount": 26
+    },
+    {
+      "date": "2026-04-04",
+      "capturedAt": "2026-04-04T20:45:00+08:00",
+      "noteCount": 49,
+      "bodyCount": 19315,
+      "uniqueTagCount": 26
+    },
+    {
+      "date": "2026-04-05",
+      "capturedAt": "2026-04-05T20:45:00+08:00",
+      "noteCount": 49,
+      "bodyCount": 19374,
+      "uniqueTagCount": 26
+    },
+    {
+      "date": "2026-04-06",
+      "capturedAt": "2026-04-06T20:45:00+08:00",
+      "noteCount": 49,
+      "bodyCount": 19438,
+      "uniqueTagCount": 26
+    },
+    {
+      "date": "2026-04-07",
+      "capturedAt": "2026-04-07T20:45:00+08:00",
+      "noteCount": 49,
+      "bodyCount": 19504,
+      "uniqueTagCount": 27
+    },
+    {
+      "date": "2026-04-08",
+      "capturedAt": "2026-04-08T20:45:00+08:00",
+      "noteCount": 51,
+      "bodyCount": 19570,
+      "uniqueTagCount": 27
+    },
+    {
+      "date": "2026-04-09",
+      "capturedAt": "2026-04-09T20:45:00+08:00",
+      "noteCount": 51,
+      "bodyCount": 19635,
+      "uniqueTagCount": 27
+    },
+    {
+      "date": "2026-04-10",
+      "capturedAt": "2026-04-10T20:45:00+08:00",
+      "noteCount": 52,
+      "bodyCount": 19779,
+      "uniqueTagCount": 27
+    },
+    {
+      "date": "2026-04-11",
+      "capturedAt": "2026-04-11T20:45:00+08:00",
+      "noteCount": 52,
+      "bodyCount": 19910,
+      "uniqueTagCount": 27
+    },
+    {
+      "date": "2026-04-12",
+      "capturedAt": "2026-04-12T20:45:00+08:00",
+      "noteCount": 52,
+      "bodyCount": 20036,
+      "uniqueTagCount": 27
+    },
+    {
+      "date": "2026-04-13",
+      "capturedAt": "2026-04-13T20:45:00+08:00",
+      "noteCount": 53,
+      "bodyCount": 20180,
+      "uniqueTagCount": 27
+    },
+    {
+      "date": "2026-04-14",
+      "capturedAt": "2026-04-14T20:45:00+08:00",
+      "noteCount": 53,
+      "bodyCount": 20342,
+      "uniqueTagCount": 27
+    },
+    {
+      "date": "2026-04-15",
+      "capturedAt": "2026-04-15T20:45:00+08:00",
+      "noteCount": 53,
+      "bodyCount": 20522,
+      "uniqueTagCount": 27
+    },
+    {
+      "date": "2026-04-16",
+      "capturedAt": "2026-04-16T20:45:00+08:00",
+      "noteCount": 54,
+      "bodyCount": 20612,
+      "uniqueTagCount": 27
+    },
+    {
+      "date": "2026-04-17",
+      "capturedAt": "2026-04-17T20:45:00+08:00",
+      "noteCount": 54,
+      "bodyCount": 20720,
+      "uniqueTagCount": 27
+    },
+    {
+      "date": "2026-04-18",
+      "capturedAt": "2026-04-18T20:45:00+08:00",
+      "noteCount": 54,
+      "bodyCount": 20846,
+      "uniqueTagCount": 28
+    },
+    {
+      "date": "2026-04-19",
+      "capturedAt": "2026-04-19T20:45:00+08:00",
+      "noteCount": 55,
+      "bodyCount": 20990,
+      "uniqueTagCount": 28
+    },
+    {
+      "date": "2026-04-20",
+      "capturedAt": "2026-04-20T20:45:00+08:00",
+      "noteCount": 55,
+      "bodyCount": 21152,
+      "uniqueTagCount": 28
+    },
+    {
+      "date": "2026-04-21",
+      "capturedAt": "2026-04-21T20:45:00+08:00",
+      "noteCount": 55,
+      "bodyCount": 21332,
+      "uniqueTagCount": 28
+    },
+    {
+      "date": "2026-04-22",
+      "capturedAt": "2026-04-22T20:45:00+08:00",
+      "noteCount": 56,
+      "bodyCount": 21422,
+      "uniqueTagCount": 28
+    },
+    {
+      "date": "2026-04-23",
+      "capturedAt": "2026-04-23T20:45:00+08:00",
+      "noteCount": 56,
+      "bodyCount": 21530,
+      "uniqueTagCount": 28
+    },
+    {
+      "date": "2026-04-24",
+      "capturedAt": "2026-04-24T20:45:00+08:00",
+      "noteCount": 56,
+      "bodyCount": 21656,
+      "uniqueTagCount": 28
+    },
+    {
+      "date": "2026-04-25",
+      "capturedAt": "2026-04-25T20:45:00+08:00",
+      "noteCount": 59,
+      "bodyCount": 21824,
+      "uniqueTagCount": 28
+    },
+    {
+      "date": "2026-04-26",
+      "capturedAt": "2026-04-26T20:45:00+08:00",
+      "noteCount": 59,
+      "bodyCount": 22041,
+      "uniqueTagCount": 28
+    },
+    {
+      "date": "2026-04-27",
+      "capturedAt": "2026-04-27T20:45:00+08:00",
+      "noteCount": 59,
+      "bodyCount": 22303,
+      "uniqueTagCount": 28
+    },
+    {
+      "date": "2026-04-28",
+      "capturedAt": "2026-04-28T20:45:00+08:00",
+      "noteCount": 60,
+      "bodyCount": 22497,
+      "uniqueTagCount": 28
+    },
+    {
+      "date": "2026-04-29",
+      "capturedAt": "2026-04-29T20:45:00+08:00",
+      "noteCount": 60,
+      "bodyCount": 22725,
+      "uniqueTagCount": 29
+    },
+    {
+      "date": "2026-04-30",
+      "capturedAt": "2026-04-30T20:45:00+08:00",
+      "noteCount": 60,
+      "bodyCount": 22980,
+      "uniqueTagCount": 29
+    },
+    {
+      "date": "2026-05-01",
+      "capturedAt": "2026-05-01T20:45:00+08:00",
+      "noteCount": 61,
+      "bodyCount": 23472,
+      "uniqueTagCount": 29
+    },
+    {
+      "date": "2026-05-02",
+      "capturedAt": "2026-05-02T20:45:00+08:00",
+      "noteCount": 61,
+      "bodyCount": 23982,
+      "uniqueTagCount": 29
+    },
+    {
+      "date": "2026-05-03",
+      "capturedAt": "2026-05-03T20:45:00+08:00",
+      "noteCount": 61,
+      "bodyCount": 24497,
+      "uniqueTagCount": 29
+    },
+    {
+      "date": "2026-05-04",
+      "capturedAt": "2026-05-04T20:45:00+08:00",
+      "noteCount": 62,
+      "bodyCount": 24811,
+      "uniqueTagCount": 29
+    },
+    {
+      "date": "2026-05-05",
+      "capturedAt": "2026-05-05T20:45:00+08:00",
+      "noteCount": 62,
+      "bodyCount": 25109,
+      "uniqueTagCount": 29
+    },
+    {
+      "date": "2026-05-06",
+      "capturedAt": "2026-05-06T20:45:00+08:00",
+      "noteCount": 62,
+      "bodyCount": 25384,
+      "uniqueTagCount": 30
+    },
+    {
+      "date": "2026-05-07",
+      "capturedAt": "2026-05-07T20:45:00+08:00",
+      "noteCount": 63,
+      "bodyCount": 25643,
+      "uniqueTagCount": 30
+    },
+    {
+      "date": "2026-05-08",
+      "capturedAt": "2026-05-08T20:45:00+08:00",
+      "noteCount": 63,
+      "bodyCount": 25935,
+      "uniqueTagCount": 30
+    },
+    {
+      "date": "2026-05-09",
+      "capturedAt": "2026-05-09T20:45:00+08:00",
+      "noteCount": 63,
+      "bodyCount": 26259,
+      "uniqueTagCount": 30
+    },
+    {
+      "date": "2026-05-10",
+      "capturedAt": "2026-05-10T20:45:00+08:00",
+      "noteCount": 64,
+      "bodyCount": 26421,
+      "uniqueTagCount": 31
+    },
+    {
+      "date": "2026-05-11",
+      "capturedAt": "2026-05-11T20:45:00+08:00",
+      "noteCount": 64,
+      "bodyCount": 26615,
+      "uniqueTagCount": 31
+    },
+    {
+      "date": "2026-05-12",
+      "capturedAt": "2026-05-12T20:45:00+08:00",
+      "noteCount": 66,
+      "bodyCount": 26842,
+      "uniqueTagCount": 31
+    },
+    {
+      "date": "2026-05-13",
+      "capturedAt": "2026-05-13T20:45:00+08:00",
+      "noteCount": 67,
+      "bodyCount": 27101,
+      "uniqueTagCount": 31
+    },
+    {
+      "date": "2026-05-14",
+      "capturedAt": "2026-05-14T20:45:00+08:00",
+      "noteCount": 67,
+      "bodyCount": 27393,
+      "uniqueTagCount": 32
+    },
+    {
+      "date": "2026-05-15",
+      "capturedAt": "2026-05-15T20:45:00+08:00",
+      "noteCount": 67,
+      "bodyCount": 27717,
+      "uniqueTagCount": 32
+    },
+    {
+      "date": "2026-05-16",
+      "capturedAt": "2026-05-16T20:45:00+08:00",
+      "noteCount": 68,
+      "bodyCount": 27879,
+      "uniqueTagCount": 32
+    },
+    {
+      "date": "2026-05-17",
+      "capturedAt": "2026-05-17T20:45:00+08:00",
+      "noteCount": 68,
+      "bodyCount": 27987,
+      "uniqueTagCount": 32
+    },
+    {
+      "date": "2026-05-18",
+      "capturedAt": "2026-05-18T20:45:00+08:00",
+      "noteCount": 68,
+      "bodyCount": 28113,
+      "uniqueTagCount": 32
+    },
+    {
+      "date": "2026-05-19",
+      "capturedAt": "2026-05-19T20:45:00+08:00",
+      "noteCount": 69,
+      "bodyCount": 28257,
+      "uniqueTagCount": 32
+    },
+    {
+      "date": "2026-05-20",
+      "capturedAt": "2026-05-20T20:45:00+08:00",
+      "noteCount": 69,
+      "bodyCount": 28438,
+      "uniqueTagCount": 32
+    },
+    {
+      "date": "2026-05-21",
+      "capturedAt": "2026-05-21T20:45:00+08:00",
+      "noteCount": 69,
+      "bodyCount": 28669,
+      "uniqueTagCount": 33
+    },
+    {
+      "date": "2026-05-22",
+      "capturedAt": "2026-05-22T20:45:00+08:00",
+      "noteCount": 70,
+      "bodyCount": 28838,
+      "uniqueTagCount": 33
+    },
+    {
+      "date": "2026-05-23",
+      "capturedAt": "2026-05-23T20:45:00+08:00",
+      "noteCount": 70,
+      "bodyCount": 29048,
+      "uniqueTagCount": 33
+    },
+    {
+      "date": "2026-05-24",
+      "capturedAt": "2026-05-24T20:45:00+08:00",
+      "noteCount": 70,
+      "bodyCount": 29293,
+      "uniqueTagCount": 33
+    },
+    {
+      "date": "2026-05-25",
+      "capturedAt": "2026-05-25T20:45:00+08:00",
+      "noteCount": 71,
+      "bodyCount": 29565,
+      "uniqueTagCount": 33
+    },
+    {
+      "date": "2026-05-26",
+      "capturedAt": "2026-05-26T20:45:00+08:00",
+      "noteCount": 71,
+      "bodyCount": 29857,
+      "uniqueTagCount": 33
+    },
+    {
+      "date": "2026-05-27",
+      "capturedAt": "2026-05-27T20:45:00+08:00",
+      "noteCount": 71,
+      "bodyCount": 30160,
+      "uniqueTagCount": 33
+    },
+    {
+      "date": "2026-05-28",
+      "capturedAt": "2026-05-28T20:45:00+08:00",
+      "noteCount": 72,
+      "bodyCount": 30359,
+      "uniqueTagCount": 33
+    },
+    {
+      "date": "2026-05-29",
+      "capturedAt": "2026-05-29T20:45:00+08:00",
+      "noteCount": 74,
+      "bodyCount": 30555,
+      "uniqueTagCount": 33
+    },
+    {
+      "date": "2026-05-30",
+      "capturedAt": "2026-05-30T20:45:00+08:00",
+      "noteCount": 74,
+      "bodyCount": 30742,
+      "uniqueTagCount": 33
+    },
+    {
+      "date": "2026-05-31",
+      "capturedAt": "2026-05-31T20:45:00+08:00",
+      "noteCount": 75,
+      "bodyCount": 30917,
+      "uniqueTagCount": 33
+    },
+    {
+      "date": "2026-06-01",
+      "capturedAt": "2026-06-01T20:45:00+08:00",
+      "noteCount": 75,
+      "bodyCount": 31079,
+      "uniqueTagCount": 34
+    },
+    {
+      "date": "2026-06-02",
+      "capturedAt": "2026-06-02T20:45:00+08:00",
+      "noteCount": 75,
+      "bodyCount": 31259,
+      "uniqueTagCount": 34
+    }
+  ],
+  "lastSuccessfulScanAt": "2026-06-02T20:45:00+08:00"
+}

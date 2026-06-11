@@ -1,0 +1,230 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>BrainGrowth Compute Class Preview</title>
+  <link rel="stylesheet" href="./styles.css">
+  <style>
+    :root {
+      --background-primary: #202123;
+      --background-secondary: #252725;
+      --background-secondary-alt: #303330;
+      --background-modifier-border: rgba(190, 205, 207, 0.18);
+      --interactive-accent: #738d8d;
+      --text-normal: #d8dee9;
+      --text-muted: #a7c7ca;
+      --text-on-accent: #111315;
+      --text-accent: #a7c7ca;
+    }
+
+    body {
+      background: var(--background-primary);
+      color: var(--text-normal);
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      margin: 0;
+    }
+
+    .preview-shell {
+      box-sizing: border-box;
+      margin: 0 auto;
+      max-width: 1280px;
+      padding: 28px;
+    }
+
+    .preview-title {
+      font-size: 22px;
+      font-weight: 800;
+      margin: 0 0 6px;
+    }
+
+    .preview-note {
+      color: var(--text-muted);
+      font-size: 13px;
+      margin-bottom: 22px;
+    }
+
+    .preview-grid {
+      display: grid;
+      gap: 18px;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .preview-card {
+      min-width: 0;
+    }
+
+    .preview-card .brain-growth-compute-panel {
+      margin-bottom: 0;
+      width: auto;
+    }
+
+    .preview-card .brain-growth-compute-value {
+      font-size: 28px;
+    }
+
+    .preview-card .brain-growth-compute-factor-icon {
+      font-size: 13px;
+      font-weight: 800;
+    }
+
+    .preview-card.is-wide {
+      grid-column: 1 / -1;
+      position: relative;
+    }
+
+    .preview-card.is-wide::before {
+      animation: brain-growth-echo-rings 7.2s ease-in-out infinite;
+      background:
+        radial-gradient(circle at 44% 38%, color-mix(in srgb, #11122a 64%, transparent) 0 10%, transparent 10.5%),
+        radial-gradient(circle at 44% 38%, color-mix(in srgb, #191b38 58%, transparent) 0 18%, transparent 18.5%),
+        radial-gradient(circle at 44% 38%, color-mix(in srgb, #292c48 50%, transparent) 0 28%, transparent 28.5%),
+        radial-gradient(circle at 44% 38%, color-mix(in srgb, #41445e 42%, transparent) 0 40%, transparent 40.5%),
+        radial-gradient(circle at 44% 38%, color-mix(in srgb, #666a78 32%, transparent) 0 55%, transparent 55.5%),
+        radial-gradient(circle at 44% 38%, color-mix(in srgb, #a2a6ad 22%, transparent) 0 72%, transparent 72.5%),
+        radial-gradient(circle at 44% 38%, color-mix(in srgb, #86a4ad 13%, transparent), transparent 86%);
+      content: "";
+      height: 560px;
+      inset: -128px auto auto -112px;
+      mask-image: radial-gradient(ellipse at 44% 38%, #000 0 52%, rgba(0, 0, 0, 0.68) 64%, transparent 86%);
+      opacity: 0.92;
+      pointer-events: none;
+      position: absolute;
+      width: min(820px, calc(100vw - 48px));
+      z-index: 0;
+    }
+
+    .preview-card.is-wide .brain-growth-compute-panel {
+      position: relative;
+      z-index: 1;
+    }
+
+    @media (max-width: 920px) {
+      .preview-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+  <main class="preview-shell brain-growth-view">
+    <h1 class="preview-title">Compute Class Background Preview</h1>
+    <div class="preview-note">Compare animation frequency, warmth, and geometric structure across the six Cognitive Compute classes.</div>
+    <section class="preview-grid">
+      <div class="preview-card is-wide">
+        <div class="brain-growth-compute-panel is-spark">
+          <div class="brain-growth-compute-primary">
+            <div class="brain-growth-compute-texture"></div>
+            <div class="brain-growth-compute-label">Cognitive Compute</div>
+            <div class="brain-growth-compute-value">0.021 TOPS</div>
+            <div class="brain-growth-compute-subtitle">The Second Brain Benchmark</div>
+            <div class="brain-growth-compute-class-row">
+              <span class="brain-growth-compute-class-label">Compute Class</span>
+              <span class="brain-growth-compute-class-value">Spark</span>
+            </div>
+          </div>
+          <div class="brain-growth-compute-factors">
+            <div class="brain-growth-compute-factor" style="--factor-color: var(--bg-note)"><span class="brain-growth-compute-factor-icon">N</span><div class="brain-growth-compute-factor-text"><div class="brain-growth-compute-factor-label">Neuron Mass</div><div class="brain-growth-compute-factor-value">0.006</div></div></div>
+            <div class="brain-growth-compute-factor" style="--factor-color: var(--bg-body)"><span class="brain-growth-compute-factor-icon">S</span><div class="brain-growth-compute-factor-text"><div class="brain-growth-compute-factor-label">Signal Strength</div><div class="brain-growth-compute-factor-value">0.010</div></div></div>
+            <div class="brain-growth-compute-factor" style="--factor-color: var(--bg-tag)"><span class="brain-growth-compute-factor-icon">E</span><div class="brain-growth-compute-factor-text"><div class="brain-growth-compute-factor-label">Engram Density</div><div class="brain-growth-compute-factor-value">0.003</div></div></div>
+            <div class="brain-growth-compute-factor" style="--factor-color: var(--bg-connection)"><span class="brain-growth-compute-factor-icon">Y</span><div class="brain-growth-compute-factor-text"><div class="brain-growth-compute-factor-label">Synapse Connectivity</div><div class="brain-growth-compute-factor-value">0.002</div></div></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="preview-card">
+        <div class="brain-growth-compute-panel is-echo">
+          <div class="brain-growth-compute-primary">
+            <div class="brain-growth-compute-texture"></div>
+            <div class="brain-growth-compute-label">Cognitive Compute</div>
+            <div class="brain-growth-compute-value">0.055 TOPS</div>
+            <div class="brain-growth-compute-subtitle">The Second Brain Benchmark</div>
+            <div class="brain-growth-compute-class-row">
+              <span class="brain-growth-compute-class-label">Compute Class</span>
+              <span class="brain-growth-compute-class-value">Echo</span>
+            </div>
+          </div>
+          <div class="brain-growth-compute-factors">
+            <div class="brain-growth-compute-factor" style="--factor-color: var(--bg-note)"><span class="brain-growth-compute-factor-icon">N</span><div class="brain-growth-compute-factor-text"><div class="brain-growth-compute-factor-label">Neuron Mass</div><div class="brain-growth-compute-factor-value">0.017</div></div></div>
+            <div class="brain-growth-compute-factor" style="--factor-color: var(--bg-body)"><span class="brain-growth-compute-factor-icon">S</span><div class="brain-growth-compute-factor-text"><div class="brain-growth-compute-factor-label">Signal Strength</div><div class="brain-growth-compute-factor-value">0.029</div></div></div>
+            <div class="brain-growth-compute-factor" style="--factor-color: var(--bg-tag)"><span class="brain-growth-compute-factor-icon">E</span><div class="brain-growth-compute-factor-text"><div class="brain-growth-compute-factor-label">Engram Density</div><div class="brain-growth-compute-factor-value">0.005</div></div></div>
+            <div class="brain-growth-compute-factor" style="--factor-color: var(--bg-connection)"><span class="brain-growth-compute-factor-icon">Y</span><div class="brain-growth-compute-factor-text"><div class="brain-growth-compute-factor-label">Synapse Connectivity</div><div class="brain-growth-compute-factor-value">0.003</div></div></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="preview-card">
+        <div class="brain-growth-compute-panel is-pilot">
+          <div class="brain-growth-compute-primary">
+            <div class="brain-growth-compute-texture"></div>
+            <div class="brain-growth-compute-label">Cognitive Compute</div>
+            <div class="brain-growth-compute-value">0.320 TOPS</div>
+            <div class="brain-growth-compute-subtitle">The Second Brain Benchmark</div>
+            <div class="brain-growth-compute-class-row"><span class="brain-growth-compute-class-label">Compute Class</span><span class="brain-growth-compute-class-value">Pilot</span></div>
+          </div>
+          <div class="brain-growth-compute-factors">
+            <div class="brain-growth-compute-factor" style="--factor-color: var(--bg-note)"><span class="brain-growth-compute-factor-icon">N</span><div class="brain-growth-compute-factor-text"><div class="brain-growth-compute-factor-label">Neuron Mass</div><div class="brain-growth-compute-factor-value">0.092</div></div></div>
+            <div class="brain-growth-compute-factor" style="--factor-color: var(--bg-body)"><span class="brain-growth-compute-factor-icon">S</span><div class="brain-growth-compute-factor-text"><div class="brain-growth-compute-factor-label">Signal Strength</div><div class="brain-growth-compute-factor-value">0.141</div></div></div>
+            <div class="brain-growth-compute-factor" style="--factor-color: var(--bg-tag)"><span class="brain-growth-compute-factor-icon">E</span><div class="brain-growth-compute-factor-text"><div class="brain-growth-compute-factor-label">Engram Density</div><div class="brain-growth-compute-factor-value">0.046</div></div></div>
+            <div class="brain-growth-compute-factor" style="--factor-color: var(--bg-connection)"><span class="brain-growth-compute-factor-icon">Y</span><div class="brain-growth-compute-factor-text"><div class="brain-growth-compute-factor-label">Synapse Connectivity</div><div class="brain-growth-compute-factor-value">0.031</div></div></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="preview-card">
+        <div class="brain-growth-compute-panel is-architect">
+          <div class="brain-growth-compute-primary">
+            <div class="brain-growth-compute-texture"></div>
+            <div class="brain-growth-compute-label">Cognitive Compute</div>
+            <div class="brain-growth-compute-value">1.82 TOPS</div>
+            <div class="brain-growth-compute-subtitle">The Second Brain Benchmark</div>
+            <div class="brain-growth-compute-class-row"><span class="brain-growth-compute-class-label">Compute Class</span><span class="brain-growth-compute-class-value">Architect</span></div>
+          </div>
+          <div class="brain-growth-compute-factors">
+            <div class="brain-growth-compute-factor" style="--factor-color: var(--bg-note)"><span class="brain-growth-compute-factor-icon">N</span><div class="brain-growth-compute-factor-text"><div class="brain-growth-compute-factor-label">Neuron Mass</div><div class="brain-growth-compute-factor-value">0.510</div></div></div>
+            <div class="brain-growth-compute-factor" style="--factor-color: var(--bg-body)"><span class="brain-growth-compute-factor-icon">S</span><div class="brain-growth-compute-factor-text"><div class="brain-growth-compute-factor-label">Signal Strength</div><div class="brain-growth-compute-factor-value">0.720</div></div></div>
+            <div class="brain-growth-compute-factor" style="--factor-color: var(--bg-tag)"><span class="brain-growth-compute-factor-icon">E</span><div class="brain-growth-compute-factor-text"><div class="brain-growth-compute-factor-label">Engram Density</div><div class="brain-growth-compute-factor-value">0.340</div></div></div>
+            <div class="brain-growth-compute-factor" style="--factor-color: var(--bg-connection)"><span class="brain-growth-compute-factor-icon">Y</span><div class="brain-growth-compute-factor-text"><div class="brain-growth-compute-factor-label">Synapse Connectivity</div><div class="brain-growth-compute-factor-value">0.280</div></div></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="preview-card">
+        <div class="brain-growth-compute-panel is-oracle">
+          <div class="brain-growth-compute-primary">
+            <div class="brain-growth-compute-texture"></div>
+            <div class="brain-growth-compute-label">Cognitive Compute</div>
+            <div class="brain-growth-compute-value">7.60 TOPS</div>
+            <div class="brain-growth-compute-subtitle">The Second Brain Benchmark</div>
+            <div class="brain-growth-compute-class-row"><span class="brain-growth-compute-class-label">Compute Class</span><span class="brain-growth-compute-class-value">Oracle</span></div>
+          </div>
+          <div class="brain-growth-compute-factors">
+            <div class="brain-growth-compute-factor" style="--factor-color: var(--bg-note)"><span class="brain-growth-compute-factor-icon">N</span><div class="brain-growth-compute-factor-text"><div class="brain-growth-compute-factor-label">Neuron Mass</div><div class="brain-growth-compute-factor-value">2.140</div></div></div>
+            <div class="brain-growth-compute-factor" style="--factor-color: var(--bg-body)"><span class="brain-growth-compute-factor-icon">S</span><div class="brain-growth-compute-factor-text"><div class="brain-growth-compute-factor-label">Signal Strength</div><div class="brain-growth-compute-factor-value">2.980</div></div></div>
+            <div class="brain-growth-compute-factor" style="--factor-color: var(--bg-tag)"><span class="brain-growth-compute-factor-icon">E</span><div class="brain-growth-compute-factor-text"><div class="brain-growth-compute-factor-label">Engram Density</div><div class="brain-growth-compute-factor-value">1.040</div></div></div>
+            <div class="brain-growth-compute-factor" style="--factor-color: var(--bg-connection)"><span class="brain-growth-compute-factor-icon">Y</span><div class="brain-growth-compute-factor-text"><div class="brain-growth-compute-factor-label">Synapse Connectivity</div><div class="brain-growth-compute-factor-value">0.920</div></div></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="preview-card">
+        <div class="brain-growth-compute-panel is-cortex">
+          <div class="brain-growth-compute-primary">
+            <div class="brain-growth-compute-texture"></div>
+            <div class="brain-growth-compute-label">Cognitive Compute</div>
+            <div class="brain-growth-compute-value">24.30 TOPS</div>
+            <div class="brain-growth-compute-subtitle">The Second Brain Benchmark</div>
+            <div class="brain-growth-compute-class-row"><span class="brain-growth-compute-class-label">Compute Class</span><span class="brain-growth-compute-class-value">Cortex</span></div>
+          </div>
+          <div class="brain-growth-compute-factors">
+            <div class="brain-growth-compute-factor" style="--factor-color: var(--bg-note)"><span class="brain-growth-compute-factor-icon">N</span><div class="brain-growth-compute-factor-text"><div class="brain-growth-compute-factor-label">Neuron Mass</div><div class="brain-growth-compute-factor-value">6.120</div></div></div>
+            <div class="brain-growth-compute-factor" style="--factor-color: var(--bg-body)"><span class="brain-growth-compute-factor-icon">S</span><div class="brain-growth-compute-factor-text"><div class="brain-growth-compute-factor-label">Signal Strength</div><div class="brain-growth-compute-factor-value">8.420</div></div></div>
+            <div class="brain-growth-compute-factor" style="--factor-color: var(--bg-tag)"><span class="brain-growth-compute-factor-icon">E</span><div class="brain-growth-compute-factor-text"><div class="brain-growth-compute-factor-label">Engram Density</div><div class="brain-growth-compute-factor-value">3.470</div></div></div>
+            <div class="brain-growth-compute-factor" style="--factor-color: var(--bg-connection)"><span class="brain-growth-compute-factor-icon">Y</span><div class="brain-growth-compute-factor-text"><div class="brain-growth-compute-factor-label">Synapse Connectivity</div><div class="brain-growth-compute-factor-value">3.160</div></div></div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+</body>
+</html>

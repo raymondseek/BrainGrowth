@@ -1,0 +1,27 @@
+{
+  "name": "brain-growth",
+  "version": "0.2.0",
+  "description": "Track note count, body count, tags, links, and vault growth trends in Obsidian.",
+  "main": "main.js",
+  "scripts": {
+    "build": "node esbuild.config.mjs production",
+    "dev": "node esbuild.config.mjs",
+    "demo:data": "node scripts/create-demo-data.mjs",
+    "test": "node --test tests/run-tests.mjs"
+  },
+  "keywords": [
+    "obsidian",
+    "plugin",
+    "growth",
+    "dashboard"
+  ],
+  "author": "raymondseek",
+  "license": "MIT",
+  "devDependencies": {
+    "@types/node": "^20.11.30",
+    "builtin-modules": "^3.3.0",
+    "esbuild": "^0.20.2",
+    "obsidian": "^1.5.12",
+    "typescript": "^5.4.2"
+  }
+}

@@ -1,0 +1,10 @@
+{
+  "id": "brain-growth",
+  "name": "Brain Growth",
+  "version": "0.2.0",
+  "minAppVersion": "1.5.0",
+  "description": "Track note count, body count, tags, links, and vault growth trends.",
+  "author": "raymondseek",
+  "authorUrl": "https://github.com/raymondseek",
+  "isDesktopOnly": false
+}
