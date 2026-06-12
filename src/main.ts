@@ -1,4 +1,4 @@
-import { activeWindow, Notice, Plugin } from "obsidian";
+import { Notice, Plugin } from "obsidian";
 import { BrainGrowthDashboardView, BRAIN_GROWTH_VIEW_TYPE } from "./dashboardView";
 import { BrainGrowthMiniPanelView, BRAIN_GROWTH_MINI_PANEL_VIEW_TYPE } from "./miniPanelView";
 import { canInitializeHistoricalGrowth, initializeHistoricalGrowth } from "./historicalInitializer";
@@ -162,12 +162,12 @@ export default class BrainGrowthPlugin extends Plugin {
   }
 
   private queueMiniPanelEnsure(delayMs: number): void {
-    const timer = activeWindow.setTimeout(() => {
+    const timer = window.setTimeout(() => {
       void this.openMiniPanel().catch((error) => {
         console.error("Brain Growth mini panel failed to open", error);
       });
     }, delayMs);
-    this.register(() => activeWindow.clearTimeout(timer));
+    this.register(() => window.clearTimeout(timer));
   }
 
   async refreshStats(source: RefreshSource): Promise<void> {

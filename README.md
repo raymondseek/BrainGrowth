@@ -81,7 +81,7 @@ npm test
 
 1. Update `version` in `manifest.json` and `package.json`.
 2. Run `npm run build`.
-3. Create a GitHub release whose tag exactly matches the manifest version, for example `0.2.1`.
+3. Create a GitHub release whose tag exactly matches the manifest version, for example `0.2.2`.
 4. Upload `main.js`, `manifest.json`, and `styles.css` as release assets.
 
 ## License

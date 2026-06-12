@@ -2234,8 +2234,8 @@
   border-radius: 4px;
   color: var(--text-normal);
   font-size: 11px;
-  margin-left: auto;
-  padding: 3px 8px;
+  margin: 8px 0 0;
+  padding: 5px 10px;
   text-transform: none;
 }
 

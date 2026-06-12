@@ -1,5 +1,3 @@
-import { activeWindow } from "obsidian";
-
 export interface AnimateNumberOptions {
   element: HTMLElement;
   from: number;
@@ -67,22 +65,22 @@ export function animateNumber({
     toDigitIndex += 1;
   }
 
-  activeWindow.requestAnimationFrame(() => {
+  window.requestAnimationFrame(() => {
     element.addClass("is-rolling");
   });
 
-  activeWindow.setTimeout(() => {
+  window.setTimeout(() => {
     element.textContent = format(to);
     element.style.removeProperty("--brain-growth-number-roll-duration");
     element.style.removeProperty("--brain-growth-number-roll-height");
     element.classList.remove("is-rolling", "is-rolling-up", "is-rolling-down");
     element.addClass("brain-growth-number-changed");
-    activeWindow.setTimeout(() => element.removeClass("brain-growth-number-changed"), 520);
+    window.setTimeout(() => element.removeClass("brain-growth-number-changed"), 520);
   }, Math.min(520, Math.max(280, durationMs * 0.72)) + maxDelay + 40);
 }
 
 export function prefersReducedMotion(): boolean {
-  return activeWindow.matchMedia?.("(prefers-reduced-motion: reduce)").matches ?? false;
+  return window.matchMedia?.("(prefers-reduced-motion: reduce)").matches ?? false;
 }
 
 function isDigit(char: string): boolean {

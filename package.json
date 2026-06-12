@@ -1,6 +1,6 @@
 {
   "name": "brain-growth",
-  "version": "0.2.1",
+  "version": "0.2.2",
   "description": "Track note count, body count, tags, links, and vault growth trends in Obsidian.",
   "main": "main.js",
   "scripts": {

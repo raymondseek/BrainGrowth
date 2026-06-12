@@ -1,4 +1,4 @@
-import { activeDocument, activeWindow, ItemView, sanitizeHTMLToDom, setIcon, type WorkspaceLeaf } from "obsidian";
+import { ItemView, setIcon, type WorkspaceLeaf } from "obsidian";
 import { calculateCognitiveCompute, formatFactor, formatTops } from "./benchmark";
 import { formatNumber, formatGrowth, getMetricDefinition, METRICS } from "./metrics";
 import { getGrowth, RANGE_LABELS, selectSnapshotWindow } from "./ranges";
@@ -179,7 +179,7 @@ export class BrainGrowthDashboardView extends ItemView {
   private render(options: { preserveScroll?: boolean } = {}): void {
     const container = this.containerEl.children[1];
     const previousScrollPositions =
-      options.preserveScroll && container instanceof activeWindow.HTMLElement ? this.captureScrollPositions(container) : [];
+      options.preserveScroll && container instanceof window.HTMLElement ? this.captureScrollPositions(container) : [];
     container.empty();
     container.addClass("brain-growth-view");
     const backgroundMode = this.plugin.getBackgroundMode();
@@ -210,12 +210,12 @@ export class BrainGrowthDashboardView extends ItemView {
   private captureScrollPositions(container: HTMLElement): Array<{ element: HTMLElement; top: number; left: number }> {
     const candidates: HTMLElement[] = [container, this.containerEl];
     const viewContent = this.containerEl.closest(".workspace-leaf-content")?.querySelector(".view-content");
-    if (viewContent instanceof activeWindow.HTMLElement) {
+    if (viewContent instanceof window.HTMLElement) {
       candidates.push(viewContent);
     }
 
     let current: HTMLElement | null = container.parentElement;
-    while (current && current !== activeDocument.body) {
+    while (current && current !== document.body) {
       candidates.push(current);
       current = current.parentElement;
     }
@@ -233,9 +233,9 @@ export class BrainGrowthDashboardView extends ItemView {
       }
     };
 
-    activeWindow.requestAnimationFrame(restore);
-    activeWindow.setTimeout(restore, 0);
-    activeWindow.setTimeout(restore, 60);
+    window.requestAnimationFrame(restore);
+    window.setTimeout(restore, 0);
+    window.setTimeout(restore, 60);
   }
 
   private renderHeader(container: Element, lastSuccessfulScanAt: string | null): void {
@@ -462,7 +462,7 @@ export class BrainGrowthDashboardView extends ItemView {
   }
 
   private appendMarkup(container: Element, markup: string): void {
-    container.appendChild(sanitizeHTMLToDom(markup));
+    container.appendChild(document.createRange().createContextualFragment(markup));
   }
 
   private getChartAnimationKey(snapshots: Snapshot[]): string {
@@ -661,6 +661,17 @@ export class BrainGrowthDashboardView extends ItemView {
     const empty = container.createDiv({ cls: "brain-growth-empty" });
     empty.createDiv({ text: title, cls: "brain-growth-empty-title" });
     empty.createDiv({ text, cls: "brain-growth-empty-text" });
+    this.renderHistoricalGrowthAction(empty);
+  }
+
+  private renderHistoricalGrowthAction(container: Element): void {
+    if (!this.plugin.canInitializeHistoricalGrowth()) return;
+    const action = container.createEl("button", { text: "Initialize Historical Growth", cls: "brain-growth-init-action" });
+    action.addEventListener("click", async () => {
+      action.disabled = true;
+      action.textContent = "Initializing...";
+      await this.plugin.initializeHistoricalGrowth();
+    });
   }
 
   private renderMetricInsight(container: Element): void {
@@ -669,14 +680,6 @@ export class BrainGrowthDashboardView extends ItemView {
     const icon = title.createSpan({ cls: "brain-growth-insight-icon" });
     setIcon(icon, "lightbulb");
     this.insightTitleEl = title.createSpan({ cls: "brain-growth-insight-title-text" });
-    if (this.plugin.canInitializeHistoricalGrowth()) {
-      const action = title.createEl("button", { text: "Initialize Historical Growth", cls: "brain-growth-init-action" });
-      action.addEventListener("click", async () => {
-        action.disabled = true;
-        action.textContent = "Initializing...";
-        await this.plugin.initializeHistoricalGrowth();
-      });
-    }
     this.insightTextEl = panel.createDiv({ cls: "brain-growth-insight-text" });
     this.resetMetricInsight();
   }
@@ -724,7 +727,7 @@ export class BrainGrowthDashboardView extends ItemView {
 
   private applyMetricHighlight(label: string): void {
     const root = this.containerEl.children[1];
-    if (!(root instanceof activeWindow.HTMLElement)) return;
+    if (!(root instanceof window.HTMLElement)) return;
     root.addClass("is-metric-highlight-active");
     root.querySelectorAll(".brain-growth-highlight-target").forEach((target) => {
       const isMatch = target.getAttribute("data-metric-label") === label;
@@ -735,7 +738,7 @@ export class BrainGrowthDashboardView extends ItemView {
 
   private clearMetricHighlight(): void {
     const root = this.containerEl.children[1];
-    if (!(root instanceof activeWindow.HTMLElement)) return;
+    if (!(root instanceof window.HTMLElement)) return;
     root.removeClass("is-metric-highlight-active");
     root.querySelectorAll(".brain-growth-highlight-target").forEach((target) => {
       target.classList.remove("is-highlight", "is-dim");
