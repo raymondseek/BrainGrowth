@@ -136,6 +136,8 @@ const METRIC_ICONS: Record<MetricKey, string> = {
   connectionCount: "waypoints"
 };
 
+const SVG_NS = "http://www.w3.org/2000/svg";
+
 export class BrainGrowthDashboardView extends ItemView {
   private activeMetric: MetricKey = "noteCount";
   private activeRange: RangeKey = "all";
@@ -447,22 +449,33 @@ export class BrainGrowthDashboardView extends ItemView {
       panel.addClass("is-neuron-trend-panel");
       const comboChart = chart.createDiv({ cls: "brain-growth-combo-chart" });
       const comboLine = comboChart.createDiv({ cls: "brain-growth-combo-line" });
-      this.appendMarkup(comboLine, this.buildMultiLineSvgChart(snapshots, NEURON_TREND_SERIES, this.activeRange));
+      this.renderMultiLineSvgChart(comboLine, snapshots, NEURON_TREND_SERIES, this.activeRange, "Neurons growth trend");
       const comboSide = comboChart.createDiv({ cls: "brain-growth-combo-side" });
-      if (latest) this.appendMarkup(comboSide, this.buildNoteCompositionPanel(latest));
+      if (latest) this.renderNoteCompositionPanel(comboSide, latest);
     } else if (this.activeMetric === "bodyCount") {
-      this.appendMarkup(chart, this.buildSignalsChart(snapshots, this.activeRange));
+      const latest = snapshots[snapshots.length - 1];
+      const comboChart = chart.createDiv({ cls: "brain-growth-combo-chart brain-growth-signals-chart" });
+      const comboLine = comboChart.createDiv({ cls: "brain-growth-combo-line" });
+      this.renderMultiLineSvgChart(comboLine, snapshots, SIGNAL_TREND_SERIES, this.activeRange, "Signals growth trend");
+      const comboPie = comboChart.createDiv({ cls: "brain-growth-combo-pie brain-growth-signals-pie" });
+      if (latest) this.renderPieSvgChart(comboPie, latest, SIGNAL_COMPOSITION_SERIES, "Signals Current Composition");
     } else if (this.activeMetric === "uniqueTagCount") {
-      this.appendMarkup(chart, this.buildEngramChart(snapshots, this.activeRange));
+      const latest = snapshots[snapshots.length - 1];
+      const comboChart = chart.createDiv({ cls: "brain-growth-combo-chart" });
+      const comboLine = comboChart.createDiv({ cls: "brain-growth-combo-line" });
+      this.renderDualAxisSvgChart(comboLine, snapshots, ENGRAM_COUNT_TREND_SERIES, ENGRAM_RATIO_SERIES, this.activeRange, "Engram growth trend");
+      const comboTags = comboChart.createDiv({ cls: "brain-growth-combo-tags" });
+      if (latest) this.renderTopTagsPanel(comboTags, latest);
     } else if (this.activeMetric === "connectionCount") {
-      this.appendMarkup(chart, this.buildSynapsesChart(snapshots, this.activeRange));
+      const latest = snapshots[snapshots.length - 1];
+      const comboChart = chart.createDiv({ cls: "brain-growth-combo-chart" });
+      const comboLine = comboChart.createDiv({ cls: "brain-growth-combo-line" });
+      this.renderDualAxisSvgChart(comboLine, snapshots, SYNAPSE_COUNT_TREND_SERIES, SYNAPSE_RATIO_SERIES, this.activeRange, "Synapses growth trend");
+      const comboTags = comboChart.createDiv({ cls: "brain-growth-combo-tags" });
+      if (latest) this.renderNetworkStrengthPanel(comboTags, latest);
     } else {
-      this.appendMarkup(chart, this.buildSvgChart(snapshots, this.activeMetric, metric.colorVar, this.activeRange));
+      this.renderSingleSvgChart(chart, snapshots, this.activeMetric, metric.colorVar, this.activeRange);
     }
-  }
-
-  private appendMarkup(container: Element, markup: string): void {
-    container.appendChild(document.createRange().createContextualFragment(markup));
   }
 
   private getChartAnimationKey(snapshots: Snapshot[]): string {
@@ -745,6 +758,268 @@ export class BrainGrowthDashboardView extends ItemView {
     });
   }
 
+  private renderSingleSvgChart(
+    container: Element,
+    snapshots: Snapshot[],
+    metric: MetricKey,
+    color: string,
+    range: RangeKey
+  ): void {
+    const width = 900;
+    const height = 260;
+    const paddingLeft = 48;
+    const paddingRight = 24;
+    const paddingTop = 20;
+    const paddingBottom = 44;
+    const values = snapshots.map((snapshot) => snapshot[metric] ?? 0);
+    const max = Math.max(...values);
+    const yMax = Math.max(1, max);
+    const chartWidth = width - paddingLeft - paddingRight;
+    const chartHeight = height - paddingTop - paddingBottom;
+    const xAxisY = height - paddingBottom;
+    const points = snapshots.map((snapshot, index) => {
+      const x = paddingLeft + (index / Math.max(1, snapshots.length - 1)) * chartWidth;
+      const value = snapshot[metric] ?? 0;
+      const y = xAxisY - (value / yMax) * chartHeight;
+      return { x, y, value };
+    });
+    const last = points[points.length - 1];
+    const highest = points.reduce((currentHighest, point) => point.value >= currentHighest.value ? point : currentHighest);
+    const visualPoints = this.smoothVisualPoints(points);
+    const metricLabel = getMetricDefinition(metric).label;
+    const gradientId = `brain-growth-area-${metric}`;
+    const svg = this.createSvg(width, height, `${metricLabel} growth trend`);
+    const defs = this.svgEl("defs");
+    defs.appendChild(this.createAreaGradient(gradientId, color));
+    svg.appendChild(defs);
+    svg.appendChild(this.svgEl("line", { class: "brain-growth-chart-axis", x1: paddingLeft, y1: xAxisY, x2: width - paddingRight, y2: xAxisY }));
+    svg.appendChild(this.svgEl("line", { class: "brain-growth-chart-axis", x1: paddingLeft, y1: paddingTop, x2: paddingLeft, y2: xAxisY }));
+    this.appendXAxisTicks(svg, snapshots, points, range, xAxisY);
+    svg.appendChild(this.svgEl("line", { class: "brain-growth-chart-guide", x1: paddingLeft, y1: highest.y.toFixed(1), x2: highest.x.toFixed(1), y2: highest.y.toFixed(1) }));
+    svg.appendChild(this.svgEl("path", { class: "brain-growth-chart-area brain-growth-highlight-target", "data-metric-label": metricLabel, d: this.buildAreaPath(visualPoints, xAxisY), fill: `url(#${gradientId})` }));
+    svg.appendChild(this.svgEl("path", { class: "brain-growth-chart-line brain-growth-highlight-target", "data-metric-label": metricLabel, d: this.buildSmoothPath(visualPoints), pathLength: "1", fill: "none", stroke: color, "stroke-width": "3.4", "stroke-linecap": "round", "stroke-linejoin": "round" }));
+    svg.appendChild(this.svgEl("circle", { class: "brain-growth-chart-point brain-growth-highlight-target", "data-metric-label": metricLabel, cx: last.x.toFixed(1), cy: last.y.toFixed(1), r: "5", fill: color }));
+    this.appendSvgText(svg, formatNumber(max), paddingLeft - 10, highest.y, "brain-growth-chart-label", "end");
+    this.appendSvgText(svg, "0", paddingLeft - 10, xAxisY, "brain-growth-chart-label", "end");
+    container.appendChild(svg);
+  }
+
+  private renderMultiLineSvgChart(
+    container: Element,
+    snapshots: Snapshot[],
+    series: TrendSeries[],
+    range: RangeKey,
+    ariaLabel: string
+  ): void {
+    const width = 900;
+    const height = 260;
+    const paddingLeft = 48;
+    const paddingRight = 24;
+    const paddingTop = 20;
+    const paddingBottom = 44;
+    const chartWidth = width - paddingLeft - paddingRight;
+    const chartHeight = height - paddingTop - paddingBottom;
+    const xAxisY = height - paddingBottom;
+    const allValues = snapshots.flatMap((snapshot) => series.map((item) => this.getSnapshotNumber(snapshot, item.key)));
+    const max = Math.max(...allValues, 0);
+    const yMax = Math.max(1, max);
+    const svg = this.createSvg(width, height, ariaLabel);
+    const defs = this.svgEl("defs");
+    series.forEach((item, seriesIndex) => {
+      defs.appendChild(this.createAreaGradient(`brain-growth-area-${this.sanitizeSvgId(item.key)}-${seriesIndex}`, item.color));
+    });
+    svg.appendChild(defs);
+    svg.appendChild(this.svgEl("line", { class: "brain-growth-chart-axis brain-growth-chart-axis-engraved", x1: paddingLeft, y1: xAxisY, x2: width - paddingRight, y2: xAxisY }));
+    svg.appendChild(this.svgEl("line", { class: "brain-growth-chart-axis brain-growth-chart-axis-engraved", x1: paddingLeft, y1: paddingTop, x2: paddingLeft, y2: xAxisY }));
+    const tickPoints = snapshots.map((snapshot, index) => ({
+      x: paddingLeft + (index / Math.max(1, snapshots.length - 1)) * chartWidth,
+      y: xAxisY,
+      value: this.getSnapshotNumber(snapshot, "noteCount")
+    }));
+    this.appendXAxisTicks(svg, snapshots, tickPoints, range, xAxisY);
+    series.forEach((item, seriesIndex) => {
+      const points = snapshots.map((snapshot, index) => {
+        const value = this.getSnapshotNumber(snapshot, item.key);
+        const x = paddingLeft + (index / Math.max(1, snapshots.length - 1)) * chartWidth;
+        const y = xAxisY - (value / yMax) * chartHeight;
+        return { x, y };
+      });
+      this.appendSeries(svg, points, item.label, item.color, `brain-growth-area-${this.sanitizeSvgId(item.key)}-${seriesIndex}`, `brain-growth-chart-line-${seriesIndex}`);
+    });
+    this.appendSvgText(svg, formatNumber(max), paddingLeft - 10, paddingTop, "brain-growth-chart-label", "end");
+    this.appendSvgText(svg, "0", paddingLeft - 10, xAxisY, "brain-growth-chart-label", "end");
+    container.appendChild(svg);
+  }
+
+  private renderDualAxisSvgChart(
+    container: Element,
+    snapshots: Snapshot[],
+    countSeries: TrendSeries[],
+    ratioSeries: { key: SnapshotRatioKey; label: string; color: string },
+    range: RangeKey,
+    ariaLabel = "Engram growth trend"
+  ): void {
+    const width = 900;
+    const height = 260;
+    const paddingLeft = 48;
+    const paddingRight = 52;
+    const paddingTop = 20;
+    const paddingBottom = 44;
+    const chartWidth = width - paddingLeft - paddingRight;
+    const chartHeight = height - paddingTop - paddingBottom;
+    const xAxisY = height - paddingBottom;
+    const allCountValues = snapshots.flatMap((snapshot) => countSeries.map((item) => this.getSnapshotNumber(snapshot, item.key)));
+    const countMax = Math.max(...allCountValues, 0);
+    const countYMax = Math.max(1, countMax);
+    const svg = this.createSvg(width, height, ariaLabel);
+    const defs = this.svgEl("defs");
+    countSeries.forEach((item, seriesIndex) => {
+      defs.appendChild(this.createAreaGradient(`brain-growth-area-${this.sanitizeSvgId(item.key)}-${seriesIndex}`, item.color));
+    });
+    defs.appendChild(this.createAreaGradient(`brain-growth-area-${this.sanitizeSvgId(ratioSeries.key)}`, ratioSeries.color));
+    svg.appendChild(defs);
+    svg.appendChild(this.svgEl("line", { class: "brain-growth-chart-axis brain-growth-chart-axis-engraved", x1: paddingLeft, y1: xAxisY, x2: width - paddingRight, y2: xAxisY }));
+    svg.appendChild(this.svgEl("line", { class: "brain-growth-chart-axis brain-growth-chart-axis-engraved", x1: paddingLeft, y1: paddingTop, x2: paddingLeft, y2: xAxisY }));
+    svg.appendChild(this.svgEl("line", { class: "brain-growth-chart-axis brain-growth-chart-axis-engraved", x1: width - paddingRight, y1: paddingTop, x2: width - paddingRight, y2: xAxisY }));
+    const tickPoints = snapshots.map((snapshot, index) => ({
+      x: paddingLeft + (index / Math.max(1, snapshots.length - 1)) * chartWidth,
+      y: xAxisY,
+      value: this.getSnapshotNumber(snapshot, "uniqueTagCount")
+    }));
+    this.appendXAxisTicks(svg, snapshots, tickPoints, range, xAxisY);
+    countSeries.forEach((item, seriesIndex) => {
+      const points = snapshots.map((snapshot, index) => {
+        const value = this.getSnapshotNumber(snapshot, item.key);
+        const x = paddingLeft + (index / Math.max(1, snapshots.length - 1)) * chartWidth;
+        const y = xAxisY - (value / countYMax) * chartHeight;
+        return { x, y };
+      });
+      this.appendSeries(svg, points, item.label, item.color, `brain-growth-area-${this.sanitizeSvgId(item.key)}-${seriesIndex}`, `brain-growth-chart-line-${seriesIndex}`);
+    });
+    const ratioPoints = snapshots.map((snapshot, index) => {
+      const value = this.getSnapshotRatio(snapshot, ratioSeries.key);
+      const x = paddingLeft + (index / Math.max(1, snapshots.length - 1)) * chartWidth;
+      const y = xAxisY - value * chartHeight;
+      return { x, y };
+    });
+    this.appendSeries(svg, ratioPoints, ratioSeries.label, ratioSeries.color, `brain-growth-area-${this.sanitizeSvgId(ratioSeries.key)}`, "brain-growth-chart-line-ratio");
+    this.appendSvgText(svg, formatNumber(countMax), paddingLeft - 10, paddingTop, "brain-growth-chart-label", "end");
+    this.appendSvgText(svg, "0", paddingLeft - 10, xAxisY, "brain-growth-chart-label", "end");
+    this.appendSvgText(svg, "100%", width - paddingRight + 10, paddingTop, "brain-growth-chart-label", "start");
+    this.appendSvgText(svg, "0%", width - paddingRight + 10, xAxisY, "brain-growth-chart-label", "start");
+    container.appendChild(svg);
+  }
+
+  private renderPieSvgChart(container: Element, snapshot: Snapshot, series: TrendSeries[], label: string): void {
+    const radius = 76;
+    const circumference = 2 * Math.PI * radius;
+    const values = series.map((item) => Math.max(0, this.getSnapshotNumber(snapshot, item.key)));
+    const total = values.reduce((sum, value) => sum + value, 0);
+    let offset = 0;
+    const svg = this.createSvg(200, 200, label);
+    svg.appendChild(this.svgEl("circle", { cx: "100", cy: "100", r: radius, fill: "none", stroke: "color-mix(in srgb, var(--text-muted) 14%, transparent)", "stroke-width": "32" }));
+    series.forEach((item, index) => {
+      const value = values[index];
+      const dash = total > 0 ? (value / total) * circumference : 0;
+      svg.appendChild(this.svgEl("circle", {
+        class: "brain-growth-pie-segment brain-growth-highlight-target",
+        "data-metric-label": item.label,
+        cx: "100",
+        cy: "100",
+        r: radius,
+        fill: "none",
+        stroke: item.color,
+        "stroke-width": "32",
+        "stroke-dasharray": `${dash.toFixed(2)} ${(circumference - dash).toFixed(2)}`,
+        "stroke-dashoffset": (-offset).toFixed(2),
+        transform: "rotate(-90 100 100)"
+      }));
+      offset += dash;
+    });
+    svg.appendChild(this.svgEl("circle", { class: "brain-growth-pie-center", cx: "100", cy: "100", r: "48" }));
+    this.appendSvgText(svg, "Current", 100, 96, "brain-growth-pie-label", "middle");
+    const value = this.appendSvgText(svg, formatNumber(total), 100, 116, "brain-growth-pie-value brain-growth-highlight-target", "middle");
+    value.setAttribute("data-metric-label", "Total Body Count");
+    container.appendChild(svg);
+  }
+
+  private appendSeries(
+    svg: SVGSVGElement,
+    points: Array<{ x: number; y: number }>,
+    label: string,
+    color: string,
+    gradientId: string,
+    lineClass = ""
+  ): void {
+    const visualPoints = this.smoothVisualPoints(points);
+    const last = points[points.length - 1];
+    svg.appendChild(this.svgEl("path", { class: "brain-growth-chart-area brain-growth-highlight-target", "data-metric-label": label, d: this.buildAreaPath(visualPoints, 216), fill: `url(#${gradientId})` }));
+    svg.appendChild(this.svgEl("path", { class: `brain-growth-chart-line brain-growth-highlight-target ${lineClass}`.trim(), "data-metric-label": label, d: this.buildSmoothPath(visualPoints), pathLength: "1", fill: "none", stroke: color, "stroke-width": "2.2", "stroke-linecap": "round", "stroke-linejoin": "round" }));
+    svg.appendChild(this.svgEl("circle", { class: "brain-growth-chart-point brain-growth-highlight-target", "data-metric-label": label, cx: last.x.toFixed(1), cy: last.y.toFixed(1), r: "3.6", fill: color }));
+  }
+
+  private createSvg(width: number, height: number, ariaLabel: string): SVGSVGElement {
+    const svg = this.svgEl("svg", {
+      class: "brain-growth-chart-svg",
+      viewBox: `0 0 ${width} ${height}`,
+      role: "img",
+      "aria-label": ariaLabel
+    }) as SVGSVGElement;
+    return svg;
+  }
+
+  private svgEl(tag: string, attrs: Record<string, string | number> = {}): SVGElement {
+    const element = document.createElementNS(SVG_NS, tag);
+    Object.entries(attrs).forEach(([key, value]) => element.setAttribute(key, String(value)));
+    return element;
+  }
+
+  private appendSvgText(
+    svg: SVGElement,
+    text: string,
+    x: number,
+    y: number,
+    className: string,
+    textAnchor: "start" | "middle" | "end"
+  ): SVGTextElement {
+    const element = this.svgEl("text", {
+      class: className,
+      x: x.toFixed(1),
+      y: y.toFixed(1),
+      "text-anchor": textAnchor,
+      "dominant-baseline": "middle"
+    }) as SVGTextElement;
+    element.textContent = text;
+    svg.appendChild(element);
+    return element;
+  }
+
+  private appendXAxisTicks(
+    svg: SVGElement,
+    snapshots: Snapshot[],
+    points: Array<{ x: number; y: number; value: number }>,
+    range: RangeKey,
+    xAxisY: number
+  ): void {
+    const tickCount = range === "7d" ? 3 : range === "all" ? 5 : 4;
+    const indexes = this.pickTickIndexes(snapshots.length, tickCount);
+    indexes.forEach((index) => {
+      const point = points[index];
+      const snapshot = snapshots[index];
+      const anchor = index === 0 ? "start" : index === snapshots.length - 1 ? "end" : "middle";
+      svg.appendChild(this.svgEl("line", { class: "brain-growth-chart-tick", x1: point.x.toFixed(1), y1: xAxisY, x2: point.x.toFixed(1), y2: (xAxisY + 5).toFixed(1) }));
+      this.appendSvgText(svg, this.formatXAxisDate(snapshot.date, range), point.x, xAxisY + 22, "brain-growth-chart-x-label", anchor);
+    });
+  }
+
+  private createAreaGradient(id: string, color: string): SVGLinearGradientElement {
+    const gradient = this.svgEl("linearGradient", { id, x1: "0", x2: "0", y1: "0", y2: "1" }) as SVGLinearGradientElement;
+    gradient.appendChild(this.svgEl("stop", { offset: "0%", "stop-color": color, "stop-opacity": "0.28" }));
+    gradient.appendChild(this.svgEl("stop", { offset: "72%", "stop-color": color, "stop-opacity": "0.08" }));
+    gradient.appendChild(this.svgEl("stop", { offset: "100%", "stop-color": color, "stop-opacity": "0" }));
+    return gradient;
+  }
+
   private buildSvgChart(snapshots: Snapshot[], metric: MetricKey, color: string, range: RangeKey): string {
     const width = 900;
     const height = 260;
@@ -912,6 +1187,16 @@ export class BrainGrowthDashboardView extends ItemView {
     `;
   }
 
+  private renderNoteCompositionPanel(container: Element, snapshot: Snapshot): void {
+    const total = Math.max(0, snapshot.noteCount ?? 0);
+    const maturityRatio = total > 0 ? (snapshot.matureNoteCount ?? 0) / total : 0;
+    const shortFormRatio = total > 0 ? (snapshot.shortNoteCount ?? 0) / total : 0;
+    const panel = container.createDiv({ cls: "brain-growth-tags-panel brain-growth-note-composition-panel" });
+    panel.createDiv({ text: "Note Composition", cls: "brain-growth-tags-title" });
+    this.renderNoteRatioRow(panel, "Maturity Ratio", maturityRatio, "#9b6aa8");
+    this.renderNoteRatioRow(panel, "Short-form Ratio", shortFormRatio, "#a88f56");
+  }
+
   private buildNoteRatioRow(label: string, ratio: number, color: string): string {
     const width = Math.min(100, Math.max(0, ratio * 100));
     return `
@@ -925,6 +1210,19 @@ export class BrainGrowthDashboardView extends ItemView {
         </div>
       </div>
     `;
+  }
+
+  private renderNoteRatioRow(container: Element, label: string, ratio: number, color: string): void {
+    const width = Math.min(100, Math.max(0, ratio * 100));
+    const row = container.createDiv({ cls: "brain-growth-note-ratio brain-growth-highlight-target" });
+    row.setAttr("data-metric-label", label);
+    const head = row.createDiv({ cls: "brain-growth-phase3-ratio-head" });
+    head.createSpan({ text: label, cls: "brain-growth-phase3-label" });
+    head.createSpan({ text: this.formatRatio(ratio), cls: "brain-growth-phase3-value" });
+    const track = row.createDiv({ cls: "brain-growth-phase3-ratio-track" });
+    const fill = track.createDiv({ cls: "brain-growth-phase3-ratio-fill brain-growth-highlight-target" });
+    fill.setAttr("data-metric-label", label);
+    fill.setAttr("style", `--bar-color: ${color}; --bar-width: ${width}%`);
   }
 
   private buildDualAxisSvgChart(
@@ -1041,6 +1339,32 @@ export class BrainGrowthDashboardView extends ItemView {
     `;
   }
 
+  private renderTopTagsPanel(container: Element, snapshot: Snapshot): void {
+    const tags = this.getSortedTopTags(snapshot.topTags);
+    const label = "Top 5 Tag Types";
+    if (tags.length === 0) {
+      const panel = container.createDiv({ cls: "brain-growth-tags-panel brain-growth-highlight-target" });
+      panel.setAttr("data-metric-label", label);
+      panel.createDiv({ text: label, cls: "brain-growth-tags-title" });
+      panel.createDiv({ text: "Pending scan", cls: "brain-growth-summary-text" });
+      return;
+    }
+
+    const max = Math.max(...tags.map((tag) => tag.count), 1);
+    const panel = container.createDiv({ cls: "brain-growth-tags-panel" });
+    const title = panel.createDiv({ text: label, cls: "brain-growth-tags-title brain-growth-highlight-target" });
+    title.setAttr("data-metric-label", label);
+    tags.forEach((tag, index) => {
+      const row = panel.createDiv({ cls: "brain-growth-tags-row brain-growth-highlight-target" });
+      row.setAttr("data-metric-label", label);
+      row.setAttr("style", `--tag-color: ${this.getTagColor(index)}`);
+      row.createDiv({ text: tag.tag, cls: "brain-growth-tags-label tag" });
+      const track = row.createDiv({ cls: "brain-growth-tags-track" });
+      track.createDiv({ cls: "brain-growth-tags-fill", attr: { style: `--bar-width: ${(tag.count / max) * 100}%` } });
+      row.createDiv({ text: formatNumber(tag.count), cls: "brain-growth-tags-value" });
+    });
+  }
+
   private getTagColor(index: number): string {
     return ["#7fb7b2", "#8fa8d9", "#a38ac0", "#9aa86f", "#c0a16f"][index % 5];
   }
@@ -1065,6 +1389,26 @@ export class BrainGrowthDashboardView extends ItemView {
         </div>
       </div>
     `;
+  }
+
+  private renderNetworkStrengthPanel(container: Element, snapshot: Snapshot): void {
+    const coverage = snapshot.linkCoverageRatio ?? 0;
+    const panel = container.createDiv({ cls: "brain-growth-tags-panel brain-growth-network-panel" });
+    panel.createDiv({ text: "Network Strength", cls: "brain-growth-tags-title" });
+    const ratio = panel.createDiv({ cls: "brain-growth-network-ratio brain-growth-highlight-target" });
+    ratio.setAttr("data-metric-label", "Link Coverage Ratio");
+    const head = ratio.createDiv({ cls: "brain-growth-phase3-ratio-head" });
+    head.createSpan({ text: "Link Coverage Ratio", cls: "brain-growth-phase3-label" });
+    head.createSpan({ text: this.formatRatio(snapshot.linkCoverageRatio), cls: "brain-growth-phase3-value" });
+    const track = ratio.createDiv({ cls: "brain-growth-phase3-ratio-track" });
+    const fill = track.createDiv({ cls: "brain-growth-phase3-ratio-fill brain-growth-highlight-target" });
+    fill.setAttr("data-metric-label", "Link Coverage Ratio");
+    fill.setAttr("style", `--bar-color: ${SYNAPSE_RATIO_SERIES.color}; --bar-width: ${Math.min(100, Math.max(0, coverage * 100))}%`);
+
+    const card = panel.createDiv({ cls: "brain-growth-network-card" });
+    card.createDiv({ text: "Average Links Per Note", cls: "brain-growth-phase3-label" });
+    const value = card.createDiv({ text: this.formatDecimal(snapshot.averageLinksPerNote), cls: "brain-growth-network-value brain-growth-highlight-target" });
+    value.setAttr("data-metric-label", "Average Links Per Note");
   }
 
   private buildPieChart(snapshot: Snapshot, series: TrendSeries[], label: string): string {

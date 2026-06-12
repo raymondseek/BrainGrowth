@@ -1,7 +1,7 @@
 {
   "id": "brain-growth",
   "name": "Brain Growth",
-  "version": "0.2.2",
+  "version": "0.2.3",
   "minAppVersion": "1.8.0",
   "description": "Track note count, body count, tags, links, and vault growth trends.",
   "author": "raymondseek",
