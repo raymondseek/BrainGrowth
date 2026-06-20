@@ -7,8 +7,9 @@ export function analyzeMarkdownContent(markdown: string): FileAnalysisResult {
   const bodyCandidate = prepareBodyCandidate(markdown, { preserveWikiLinks: true });
   const internalLinks = extractInternalLinks(bodyCandidate);
   const bodyWithoutLinks = removeWikiLinks(bodyCandidate);
-  const tags = extractTags(bodyWithoutLinks);
-  const tagOccurrences = extractTagOccurrences(bodyWithoutLinks);
+  const frontmatterTagOccurrences = extractFrontmatterTagOccurrences(markdown);
+  const tagOccurrences = mergeTagOccurrences(frontmatterTagOccurrences, extractTagOccurrences(bodyWithoutLinks));
+  const tags = new Set([...extractTags(bodyWithoutLinks), ...frontmatterTagOccurrences.keys()]);
   const countable = prepareCountableText(bodyWithoutLinks);
   const bodyComposition = countBodyComposition(countable);
 
@@ -76,6 +77,33 @@ export function extractTags(text: string): Set<string> {
   return tags;
 }
 
+export function extractFrontmatterTagOccurrences(markdown: string): Map<string, number> {
+  const frontmatter = getFrontmatter(markdown.replace(/\r\n?/g, "\n"));
+  const occurrences = new Map<string, number>();
+  if (!frontmatter) return occurrences;
+
+  const lines = frontmatter.split("\n");
+  for (let index = 0; index < lines.length; index += 1) {
+    const match = lines[index].match(/^tags:\s*(.*)$/);
+    if (!match) continue;
+
+    const inlineValue = match[1].trim();
+    if (inlineValue) {
+      addFrontmatterTags(occurrences, parseFrontmatterTagValues(inlineValue));
+      continue;
+    }
+
+    for (let nextIndex = index + 1; nextIndex < lines.length; nextIndex += 1) {
+      const nextLine = lines[nextIndex];
+      if (/^[A-Za-z0-9_-]+:\s*/.test(nextLine)) break;
+      const item = nextLine.match(/^\s*-\s*(.+)$/);
+      if (item) addFrontmatterTags(occurrences, parseFrontmatterTagValues(item[1]));
+    }
+  }
+
+  return occurrences;
+}
+
 export function prepareCountableText(text: string): string {
   let countable = text;
   countable = countable.replace(TAG_PATTERN, " ");
@@ -112,12 +140,62 @@ export function countBodyComposition(text: string): {
   };
 }
 
-function removeFrontmatter(text: string): string {
-  if (!text.startsWith("---")) return text;
+function getFrontmatter(text: string): string | null {
+  if (!text.startsWith("---")) return null;
   const end = text.indexOf("\n---", 3);
-  if (end === -1) return text;
+  if (end === -1) return null;
+  return text.slice(4, end);
+}
+
+function removeFrontmatter(text: string): string {
+  const frontmatter = getFrontmatter(text);
+  if (frontmatter === null) return text;
+  const end = frontmatter.length + 4;
   const afterEnd = text.indexOf("\n", end + 4);
   return afterEnd === -1 ? "" : text.slice(afterEnd + 1);
+}
+
+function parseFrontmatterTagValues(value: string): string[] {
+  const trimmed = stripInlineYamlComment(value.trim());
+  if (!trimmed) return [];
+  if (trimmed.startsWith("[") && trimmed.endsWith("]")) {
+    return trimmed
+      .slice(1, -1)
+      .split(",")
+      .map((item) => item.trim())
+      .filter(Boolean);
+  }
+  return [trimmed];
+}
+
+function addFrontmatterTags(occurrences: Map<string, number>, values: string[]): void {
+  for (const value of values) {
+    const tag = normalizeFrontmatterTag(value);
+    if (!tag) continue;
+    occurrences.set(tag, (occurrences.get(tag) ?? 0) + 1);
+  }
+}
+
+function normalizeFrontmatterTag(value: string): string {
+  const unquoted = value.trim().replace(/^['"]|['"]$/g, "").trim();
+  const withoutHash = unquoted.startsWith("#") ? unquoted.slice(1) : unquoted;
+  if (!/^[A-Za-z0-9_\-\u4e00-\u9fff]+(?:\/[A-Za-z0-9_\-\u4e00-\u9fff]+)*$/u.test(withoutHash)) return "";
+  return `#${withoutHash}`;
+}
+
+function mergeTagOccurrences(...maps: Array<Map<string, number>>): Map<string, number> {
+  const merged = new Map<string, number>();
+  for (const map of maps) {
+    for (const [tag, count] of map) {
+      merged.set(tag, (merged.get(tag) ?? 0) + count);
+    }
+  }
+  return merged;
+}
+
+function stripInlineYamlComment(value: string): string {
+  if (value.startsWith("'") || value.startsWith('"')) return value;
+  return value.replace(/\s+#.*$/, "").trim();
 }
 
 function stripQuoteBlocksButKeepCallouts(text: string): string {

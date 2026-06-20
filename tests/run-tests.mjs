@@ -59,8 +59,32 @@ tags:
 `;
 
   const result = analyzeMarkdownContent(markdown);
-  assert.deepEqual([...result.tags], ["#正文Tag", "#body/tag"]);
+  assert.deepEqual([...result.tags], ["#正文Tag", "#body/tag", "#frontmatter"]);
   assert.equal(result.bodyCount, 6);
+});
+
+test("counts Obsidian properties tags without adding frontmatter to body count", () => {
+  const markdown = `---
+tags:
+  - 订阅
+  - VPS
+  - 部署脚本
+  - BBR
+  - Openwrt
+  - OpenClash
+date: 2026-06-19 18:16:16
+---
+正文 Alpha #body/tag`;
+
+  const result = analyzeMarkdownContent(markdown);
+
+  assert.equal(result.bodyCount, 3);
+  assert.deepEqual(
+    [...result.tags],
+    ["#body/tag", "#订阅", "#VPS", "#部署脚本", "#BBR", "#Openwrt", "#OpenClash"]
+  );
+  assert.equal(result.tagOccurrences.get("#订阅"), 1);
+  assert.equal(result.tagOccurrences.get("#body/tag"), 1);
 });
 
 test("keeps table, html inner text, footnote body, and callout content", () => {
